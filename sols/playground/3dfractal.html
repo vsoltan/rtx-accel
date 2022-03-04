@@ -1,0 +1,38 @@
+<html>
+	<head>
+		<title>Three.js Playground</title>
+		<style>
+			#msg {
+				position: fixed;
+				color: #404040;
+				font-family: monospace;
+				font-size: 16px;
+				top: 815px;
+				left: 20px;
+				background-color: #DDDDDD;
+			}
+			#surface {
+				border: 1px solid gray;
+				position: absolute;
+				top: 0px;
+				left: 0px;
+				width: 800px;
+				height: 800px;
+				background-color: #000033;
+			}
+
+		</style>
+		<meta charset="utf-8"/>
+	</head>
+	<!-- This is important to prevent menu during right-click -->
+	<body oncontextmenu="return false;">
+		<!-- Example control points. -->
+		<script src="three.min.js"></script>
+		<script src="playground.js"></script>
+		<script src="OBJExporter.js"></script>
+		<script src="FileSaver.js"></script>
+		<div id="surface" width=800 height=800></div>
+		<div id="msg" width=800>Output</div>
+
+	</body>
+</html>

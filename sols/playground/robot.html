@@ -1,0 +1,52 @@
+<body>
+<script src='three.min.js'></script>
+<script src='OrbitControls.js'></script>
+<script>
+let scene = new THREE.Scene();
+let camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight, 0.1, 10);
+camera.position.z = 5;
+let renderer = new THREE.WebGLRenderer();
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
+let orbit = new THREE.OrbitControls(camera, renderer.domElement);	// create mouse control
+
+let arm = new THREE.BoxGeometry(0.2, 1, 0.2, 2, 10, 2);
+let material = new THREE.MeshBasicMaterial({color: 0xfffff, wireframe: true});
+let lower = new THREE.Mesh(arm, material);
+let middle = new THREE.Mesh(arm, material);
+let upper = new THREE.Mesh(arm, material);
+
+lower.position.y = -1;
+scene.add(lower);	// add lower arm to scene
+
+let middle_group = new THREE.Group();	// place holder for middle group
+lower.add(middle_group); // add moddle group to lower arm
+
+middle.position.y = 0.5;	// position middle arm relative to origin
+middle_group.add(middle);	// add middle arm to middle group
+middle_group.position.y = 0.5;	// translate middle group so it connects at the end of lower arm
+
+let upper_group = new THREE.Group();	// place holder for upper group
+middle.add(upper_group);	// add upper group to middle arm
+
+upper.position.y = 0.5;		// position upper arm relative to origin
+upper_group.add(upper);		// add upper arm to upper_group
+upper_group.position.y = 0.5;	// translate upper_group so it connects at the end of the middle arm
+
+
+let theta=0;
+function render() {
+	requestAnimationFrame(render);
+	scene.rotation.y += 0.01;
+	
+	upper_group.rotation.z = Math.sin(theta);
+	middle_group.rotation.z = Math.sin(theta);
+	theta+=0.01;
+	upper.rotation.y += 0.1;
+	
+	renderer.render(scene, camera);
+};
+render();
+</script>
+</body>
+

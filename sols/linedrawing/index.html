@@ -1,0 +1,23 @@
+<html>
+	<head>
+		<title>Midpoint Drawing Demo</title>
+		<style>
+			#drawing {
+				border: 1px solid gray;
+				position: absolute;
+				top: 0px;
+				left: 0px;
+				width: 600px;
+				height: 600px;
+				background-color: black;
+			}
+		</style>
+		<meta charset="utf-8"/>
+	</head>
+	<!-- This is important to prevent menu during right-click -->
+	<body oncontextmenu="return false;">
+		<!-- Example control points. -->
+		<script src="midpoint.js"></script>
+		<canvas id="drawing" width=600 height=600></canvas>
+	</body>
+</html>
