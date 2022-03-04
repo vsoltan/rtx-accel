@@ -9,7 +9,12 @@ renderer.setClearColor(new THREE.Color(0.3, 0.3, 0.3));
 
 document.body.appendChild(renderer.domElement);
 
-var material = new THREE.MeshStandardMaterial( {color: new THREE.Color(1, 0.3, 0.1), side: THREE.DoubleSide} );
+// orange
+//var material = new THREE.MeshStandardMaterial( {color: new THREE.Color(1, 0.3, 0.1), side: THREE.DoubleSide} );
+
+// blue 
+var material = new THREE.MeshStandardMaterial( {color: new THREE.Color(0, 0, 1), side: THREE.DoubleSide} );
+
 var light1 = new THREE.PointLight( new THREE.Color(1, 1, 1), 2, 50 );
 light1.position.set(-5, 10, 5);
 

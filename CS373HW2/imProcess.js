@@ -64,13 +64,12 @@ function adjustSaturation(input, out, saturation) {
 
 	for (let i = 0; i < input.width * input.height; i++) {
 		let idx = i * 4;
-		let grayScale = 0.3 * pixelClamp(ip[idx + 0]) + 0.59 * pixelClamp(ip[idx + 1]) + 0.11 * pixelClamp(ip[idx + 2]);
+		let grayScale = 0.3 * (ip[idx + 0]) + 0.59 * (ip[idx + 1]) + 0.11 * (ip[idx + 2]);
 		op[idx + 0] = pixelClamp(ip[idx + 0] * saturation + grayScale * (1 - saturation));
 		op[idx + 1] = pixelClamp(ip[idx + 1] * saturation + grayScale * (1 - saturation));
 		op[idx + 2] = pixelClamp(ip[idx + 2] * saturation + grayScale * (1 - saturation));
 	}
 }
-
 /* ===================================================
  *                 Image Convolution
  * =================================================== */
@@ -169,7 +168,7 @@ function orderedDither(input, output) {
 	let op = output.pixels
 
 	for(let y = 0; y < input.height; y++) {
-  	for(let x = 0; x < input.width; x++) {
+  		for(let x = 0; x < input.width; x++) {
 			let e = bayers[x % 4][y % 4] * 255
 			let idx = (y * input.width + x) * 4
 			let grayScale = 0.3 * ip[idx + 0] + 0.59 * ip[idx + 1] + 0.11 * ip[idx + 2]

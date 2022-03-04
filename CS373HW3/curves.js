@@ -131,16 +131,20 @@ function computePoint(pointList, t) {
 	return computePoint(sampledPoints, t);
 }
 
+
 function computeBezier() {
 	if (controlPts.length < 3) { return; } // need at least 3 control points
 
 	for (let i = 0; i <= nSegment; i++) {
 		let t = i / nSegment;
+
+		// number of curve points is nSegment+1
 		curvePts[i] = computePoint(controlPts, t)
 	}
 
 	drawCurve();
 }
+
 
 function computeCubicPoint(pointList, t) {
 
@@ -203,10 +207,12 @@ function computeHermitePoint(pointList, t) {
 	let p0 = pointList[0];
 	let p1 = pointList[1];
 
+	scale = 2
+
 	let A = 2 * t ** 3 - 3 * t ** 2 + 1;
 	let B = -2 * t ** 3 + 3 * t ** 2;
-	let C = 2 * (t ** 3 - 2 * t ** 2 + t);
-	let D = 2 * (t ** 3 - t ** 2);
+	let C = scale * (t ** 3 - 2 * t ** 2 + t);
+	let D = scale * (t ** 3 - t ** 2);
 
 	let newx = A * p0.x + B * p1.x + C * p0.dx + D * p1.dx;
 	let newy = A * p0.y + B * p1.y + C * p0.dy + D * p1.dy;
