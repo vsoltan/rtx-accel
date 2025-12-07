@@ -3,13 +3,13 @@
 let isectP = new THREE.Vector3(0, 0, 0)
 
 class BoundingBox {
-  constructor (min, max, objs) {
+  constructor(min, max, objs) {
     this.min = min
     this.max = max
     this.box = new THREE.Box3(min, max)
     this.objs = objs // objects contained within the box
   }
-  intersect (ray) {
+  intersect(ray) {
     let raytrace = new THREE.Ray(ray.o, ray.d)
     if (!raytrace.intersectBox(this.box, isectP)) { return false }
     return true
@@ -17,19 +17,19 @@ class BoundingBox {
 }
 
 class BoundingVolumeNode {
-  constructor (boundingBox, level) {
+  constructor(boundingBox, level) {
     this.boundingBox = boundingBox
     this.level = level
     this.left = null
     this.right = null
   }
-  hasChild () {
+  hasChild() {
     return this.left || this.right
   }
-  intersectsWith (ray) {
+  intersectsWith(ray) {
     return this.boundingBox.intersect(ray)
   }
-  getIntersection (ray) {
+  getIntersection(ray) {
     if (this.intersectsWith(ray)) {
       if (this.hasChild()) {
         let L = [], R = []
@@ -41,7 +41,7 @@ class BoundingVolumeNode {
   }
 }
 
-function constructBVHTree (objs, level) {
+function constructBVHTree(objs, level) {
   if (objs.length == 0) {
     console.log('shape struct did not load properly')
     return null
@@ -60,7 +60,7 @@ function constructBVHTree (objs, level) {
   return root
 }
 
-function getPartition (objs, axis) {
+function getPartition(objs, axis) {
   sortAlongAxis(objs, axis)
   let split = Math.floor((objs.length + 1) / 2)
 
@@ -69,7 +69,7 @@ function getPartition (objs, axis) {
   return { lobjs: leftObj, robjs: rightObj }
 }
 
-function createBoundFor (objs) {
+function createBoundFor(objs) {
   let min = new THREE.Vector3(Infinity, Infinity, Infinity)
   let max = new THREE.Vector3(-Infinity, -Infinity, -Infinity)
 
@@ -83,14 +83,14 @@ function createBoundFor (objs) {
 
 // HELPER FUNCTIONS
 
-function getMaxAxis (boundingBox) {
+function getMaxAxis(boundingBox) {
   let min = Object.values(boundingBox.min)
   let max = Object.values(boundingBox.max)
   let lengths = difference(max, min)
   return indexOfMax(lengths)
 }
 
-function indexOfMax (array) {
+function indexOfMax(array) {
   if (array.length == 0) { return -1 }
   let index = 0
   let maxValue = array[0]
@@ -105,9 +105,9 @@ function indexOfMax (array) {
 }
 
 // subtract the values of two arrays
-function difference (u, w) { return u.map((a, i) => a - w[i]) }
+function difference(u, w) { return u.map((a, i) => a - w[i]) }
 
-function sortAlongAxis (objs, axis) {
+function sortAlongAxis(objs, axis) {
   switch (axis) {
     case 0:
       return objs.sort((a, b) => a.C.x - b.C.x)
@@ -123,13 +123,13 @@ function sortAlongAxis (objs, axis) {
   }
 }
 
-function minVector (min, v) {
+function minVector(min, v) {
   if (v.xmin < min.x) { min.x = v.xmin }
   if (v.ymin < min.y) { min.y = v.ymin }
   if (v.zmin < min.z) { min.z = v.zmin }
 }
 
-function maxVector (max, v) {
+function maxVector(max, v) {
   if (v.xmax > max.x) { max.x = v.xmax }
   if (v.ymax > max.y) { max.y = v.ymax }
   if (v.zmax > max.z) { max.z = v.zmax }
@@ -137,14 +137,14 @@ function maxVector (max, v) {
 
 // TESTING
 
-function getBoundingBox (shape) {
+function getBoundingBox(shape) {
   let bounds = shape.getBound()
   let min = new THREE.Vector3(bounds.xmin, bounds.ymin, bounds.zmin)
   let max = new THREE.Vector3(bounds.xmax, bounds.ymax, bounds.zmax)
   return new BoundingBox(min, max, [shape])
 }
 
-function getIndivBounds (obj) {
+function getIndivBounds(obj) {
   bounds = []
   for (let i = 0; i < obj.length; i++) {
     bounds.push(getBoundingBox(obj[i]))

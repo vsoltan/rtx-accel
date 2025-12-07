@@ -1,78 +1,79 @@
 <head>
 	<title>Opposing Mirrors Scene</title>
-	<meta charset="utf-8"/>
+	<meta charset="utf-8" />
 </head>
+
 <body>
-<script src="../three.min.js"></script>
-<script src="../raytracer.js"></script>
-<script src="../camera.js"></script>
-<script src="../light.js"></script>
-<script src="../shape.js"></script>
-<script src="../material.js"></script>
-<script src="../bounding.js"></script>
+	<script src="../three.min.js"></script>
+	<script src="../raytracer.js"></script>
+	<script src="../camera.js"></script>
+	<script src="../light.js"></script>
+	<script src="../shape.js"></script>
+	<script src="../material.js"></script>
+	<script src="../bounding.js"></script>
 
-<script>
-	let imageWidth = 640;
-	let imageHeight = 480;
-	let exposure = 1;
-	let backgroundColor = new THREE.Color(0, 0, 0);
-	let ambientLight = new THREE.Color(0.01, 0.01, 0.01);
-	let maxDepth = 5;
-	let camera;
-	let shapes = [];
-	let planes = [];
-	let lights = [];
-	let accel = true
-	let numComparisons = 0
-	let t1 = 0, t2 = 0
+	<script>
+		let imageWidth = 640;
+		let imageHeight = 480;
+		let exposure = 1;
+		let backgroundColor = new THREE.Color(0, 0, 0);
+		let ambientLight = new THREE.Color(0.01, 0.01, 0.01);
+		let maxDepth = 5;
+		let camera;
+		let shapes = [];
+		let planes = [];
+		let lights = [];
+		let accel = true
+		let numComparisons = 0
+		let t1 = 0, t2 = 0
 
-	function init() {
-		// create camera
-		let eye = new THREE.Vector3(0, 3, 9);
-		let target = new THREE.Vector3(0, 0, 0);
-		let up = new THREE.Vector3(0, 1, 0);
-		let fov = 60;
-		camera = new PinholeCamera(eye, target, up, fov, imageWidth/imageHeight);
+		function init() {
+			// create camera
+			let eye = new THREE.Vector3(0, 3, 9);
+			let target = new THREE.Vector3(0, 0, 0);
+			let up = new THREE.Vector3(0, 1, 0);
+			let fov = 60;
+			camera = new PinholeCamera(eye, target, up, fov, imageWidth / imageHeight);
 
-		// create a point light
-		lights.push(new PointLight(new THREE.Vector3(2, 10, 8), new THREE.Color(100, 96, 88)));
+			// create a point light
+			lights.push(new PointLight(new THREE.Vector3(2, 10, 8), new THREE.Color(100, 96, 88)));
 
-		// create specular sphere
-		let radius = 1.25;
-		shapes.push(new Sphere(new THREE.Vector3(1.5, 0, 2.5), radius,
-			PhongMaterial(new THREE.Color(1, 1, 1), new THREE.Color(1, 1, 1), new THREE.Color(2, 2, 2), 20)));
+			// create specular sphere
+			let radius = 1.25;
+			shapes.push(new Sphere(new THREE.Vector3(1.5, 0, 2.5), radius,
+				PhongMaterial(new THREE.Color(1, 1, 1), new THREE.Color(1, 1, 1), new THREE.Color(2, 2, 2), 20)));
 
-		let half_a = 22.5*Math.PI/180;
+			let half_a = 22.5 * Math.PI / 180;
 
-		// create left vertical mirror
-		let p1 = new Plane(new THREE.Vector3(0, 0, -5),
-			new THREE.Vector3(Math.cos(half_a), 0, Math.sin(half_a)),
-			MirrorMaterial(new THREE.Color(1, 0.5, 0.5)))
+			// create left vertical mirror
+			let p1 = new Plane(new THREE.Vector3(0, 0, -5),
+				new THREE.Vector3(Math.cos(half_a), 0, Math.sin(half_a)),
+				MirrorMaterial(new THREE.Color(1, 0.5, 0.5)))
 
-		// create right vertical mirror
-		let p2 = new Plane(new THREE.Vector3(0, 0, -5),
-			new THREE.Vector3(-Math.cos(half_a), 0, Math.sin(half_a)),
-			MirrorMaterial(new THREE.Color(0.5, 1, 0.5)))
+			// create right vertical mirror
+			let p2 = new Plane(new THREE.Vector3(0, 0, -5),
+				new THREE.Vector3(-Math.cos(half_a), 0, Math.sin(half_a)),
+				MirrorMaterial(new THREE.Color(0.5, 1, 0.5)))
 
-		// create diffuse plane
-		let p3 = new Plane(new THREE.Vector3(0, -radius, 0), new THREE.Vector3(0, 1, 0),
-			DiffuseMaterial(new THREE.Color(0.2, 0.2, 1.0), new THREE.Color(0.2, 0.2, 1.0)))
+			// create diffuse plane
+			let p3 = new Plane(new THREE.Vector3(0, -radius, 0), new THREE.Vector3(0, 1, 0),
+				DiffuseMaterial(new THREE.Color(0.2, 0.2, 1.0), new THREE.Color(0.2, 0.2, 1.0)))
 
-		if (accel) {
-			planes.push(p1)
-			planes.push(p2)
-			planes.push(p3)
-		} else {
-			shapes.push(p1)
-			shapes.push(p2)
-			shapes.push(p3)
+			if (accel) {
+				planes.push(p1)
+				planes.push(p2)
+				planes.push(p3)
+			} else {
+				shapes.push(p1)
+				shapes.push(p2)
+				shapes.push(p3)
+			}
+
+			t1 = new Date().getTime()
+			// start ray tracing
+			render();
 		}
 
-		t1 = new Date().getTime()
-		// start ray tracing
-		render();
-	}
-
-	window.onload = init;
-</script>
+		window.onload = init;
+	</script>
 </body>

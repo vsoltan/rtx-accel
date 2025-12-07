@@ -1,17 +1,18 @@
 /* Minimalist OBJ loader, returns three.js Geometry */
 
-function loadOBJAsMesh (url, onLoad, onProgress, onError) {
+function loadOBJAsMesh(url, onLoad, onProgress, onError) {
   let loader = new THREE.FileLoader(THREE.DefaultLoadingManager)
-  new THREE.FileLoader().load(url,
-		function (text) {
-  onLoad(parseOBJAsMesh(text))
-},
-		onProgress, onError
-	)
+  console.log(url)
+  loader.load(url,
+    function (text) {
+      onLoad(parseOBJAsMesh(text))
+    },
+    onProgress, onError
+  )
 }
 
-function parseOBJAsMesh (text) {
-  if (text.indexOf('\r\n') !== -1)	{ text = text.replace(/\r\n/g, '\n') }
+function parseOBJAsMesh(text) {
+  if (text.indexOf('\r\n') !== -1) { text = text.replace(/\r\n/g, '\n') }
   if (text.indexOf('\\\n') !== -1) { text = text.replace(/\\\n/g, '') }
   let lines = text.split('\n')
   let line = '', lineFirstChar = ''
@@ -30,11 +31,11 @@ function parseOBJAsMesh (text) {
       let data = line.split(/\s+/)
       switch (data[0]) {
         case 'v':
-				// create vertices
+          // create vertices
           mesh.vertices.push(new THREE.Vector3(parseFloat(data[1]), parseFloat(data[2]), parseFloat(data[3])))
           break
         default:
-				// ignore all other vertex attributes
+        // ignore all other vertex attributes
       }
     } else if (lineFirstChar === 'f') {
       let lineData = line.substr(1).trim()
@@ -47,12 +48,12 @@ function parseOBJAsMesh (text) {
           faceVertices.push(vertexParts)
         }
       }
-			// tessellate into triangles
+      // tessellate into triangles
       let v1 = faceVertices[0]
       for (let j = 1, jl = faceVertices.length - 1; j < jl; j++) {
         var v2 = faceVertices[j]
         var v3 = faceVertices[j + 1]
-				// create face
+        // create face
         mesh.faces.push(new THREE.Face3(parseInt(v1[0], 10) - 1, parseInt(v2[0], 10) - 1, parseInt(v3[0], 10) - 1))
       }
     }

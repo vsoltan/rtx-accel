@@ -4,7 +4,7 @@
  * direction: light vector (i.e. normalized direction from shading point to the sample)
  */
 class LightSample {
-  constructor () {
+  constructor() {
     this.intensity = null
     this.position = null
     this.direction = null
@@ -13,14 +13,14 @@ class LightSample {
 
 /* PointLight class */
 class PointLight {
-  constructor (position, intensity) {
+  constructor(position, intensity) {
     this.position = position.clone()
     this.intensity = intensity.clone()
   }
-	/* getLight returns a LightSample object
-	 * for a given shading point.
-	 */
-  getLight (shadingPoint) {
+  /* getLight returns a LightSample object
+   * for a given shading point.
+   */
+  getLight(shadingPoint) {
     let ls = new LightSample()
     ls.position = this.position.clone()
     ls.direction = this.position.clone()
@@ -34,19 +34,19 @@ class PointLight {
 
 /* SpotLight class */
 class SpotLight {
-	/* from: position of spot light
-	 * to:   target point
-	 * exponent: akin to specular highlight's shininess
-	 * cutoff: angle cutoff (i.e. 30 degrees etc.)
-	 */
-  constructor (from, to, intensity, exponent, cutoff) {
+  /* from: position of spot light
+   * to:   target point
+   * exponent: akin to specular highlight's shininess
+   * cutoff: angle cutoff (i.e. 30 degrees etc.)
+   */
+  constructor(from, to, intensity, exponent, cutoff) {
     this.from = from.clone()
     this.to = to.clone()
     this.intensity = intensity.clone()
     this.exponent = exponent
     this.cutoff = cutoff
   }
-  getLight (shadingPoint) {
+  getLight(shadingPoint) {
     let ls = new LightSample()
     ls.position = this.from.clone()
     ls.direction = shadingPoint.clone().sub(ls.position)
@@ -69,7 +69,7 @@ class SpotLight {
 }
 
 // simulate an area light by discretizing it into NsxNs point lights
-function createAreaLight (center, size, intensity, Ns) {
+function createAreaLight(center, size, intensity, Ns) {
   intensity.multiplyScalar(size * size / Ns / Ns)	// each sampled light represents a fraction of the total intensity
   for (let j = 0; j < Ns; j++) {
     for (let i = 0; i < Ns; i++) {

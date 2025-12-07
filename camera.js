@@ -1,5 +1,5 @@
 class PinholeCamera {
-  constructor (eye, target, up, fov, aspect) {
+  constructor(eye, target, up, fov, aspect) {
     this.eye = eye.clone()
     this.target = target.clone()
     this.up = up.clone()
@@ -12,7 +12,7 @@ class PinholeCamera {
     let right = aspect * top
     let left = -right
 
-		// build camera coordinate system
+    // build camera coordinate system
     let W = eye.clone()
     W.sub(target)
     W.normalize()
@@ -32,11 +32,11 @@ class PinholeCamera {
     this.up.multiplyScalar(2 * top)
   }
 
-	/* getCameraRay takes a normalized pixel coordiate (x,y)
-	 * and returns a ray that originates from the eye
-	 * and goes towards that pixel coordinate (x,y).
-	 */
-  getCameraRay (x, y) {
+  /* getCameraRay takes a normalized pixel coordiate (x,y)
+   * and returns a ray that originates from the eye
+   * and goes towards that pixel coordinate (x,y).
+   */
+  getCameraRay(x, y) {
     let direction = this.corner.clone()
     direction.addScaledVector(this.across, x)
     direction.addScaledVector(this.up, y)

@@ -5,13 +5,13 @@
  * material: material of the intersection object
  */
 class Intersection {
-  constructor () {
+  constructor() {
     this.t = 0
     this.position = new THREE.Vector3()
     this.normal = new THREE.Vector3()
     this.material = null
   }
-  set (isect) {
+  set(isect) {
     this.t = isect.t
     this.position = isect.position
     this.normal = isect.normal
@@ -24,20 +24,20 @@ class Intersection {
  * n:  plane's normal (THREE.Vector3)
  */
 class Plane {
-  constructor (P0, n, material) {
+  constructor(P0, n, material) {
     this.P0 = P0.clone()
     this.n = n.clone()
     this.n.normalize()
     this.material = material
     this.type = 0
   }
-	// Given ray and range [tmin,tmax], return intersection point.
-	// Return null if no intersection.
-  intersect (ray, tmin, tmax) {
+  // Given ray and range [tmin,tmax], return intersection point.
+  // Return null if no intersection.
+  intersect(ray, tmin, tmax) {
     let temp = this.P0.clone()
     temp.sub(ray.o) // (P0-O)
     let denom = ray.d.dot(this.n) // d.n
-    if (denom == 0) { return null	}
+    if (denom == 0) { return null }
     let t = temp.dot(this.n) / denom // (P0-O).n / d.n
     if (t < tmin || t > tmax) return null // check range
     let isect = new Intersection()   // create intersection structure
@@ -47,7 +47,7 @@ class Plane {
     isect.material = this.material
     return isect
   }
-  getBound () {
+  getBound() {
     return {
       xmin: 0, xmax: 0,
       ymin: 0, ymax: 0,
@@ -61,14 +61,14 @@ class Plane {
  * r: radius
  */
 class Sphere {
-  constructor (C, r, material) {
+  constructor(C, r, material) {
     this.C = C.clone()
     this.r = r
     this.r2 = r * r
     this.material = material
     this.type = 0
   }
-  intersect (ray, tmin, tmax) {
+  intersect(ray, tmin, tmax) {
     let O = ray.o.clone(), OC = O.sub(this.C)
     let a = 1, b = 2 * OC.dot(ray.d), c = OC.lengthSq() - this.r2
 
@@ -83,7 +83,7 @@ class Sphere {
     isect.material = this.material
     return isect
   }
-  getBound () {
+  getBound() {
     return {
       xmin: this.C.x - this.r, xmax: this.C.x + this.r,
       ymin: this.C.y - this.r, ymax: this.C.y + this.r,
@@ -92,7 +92,7 @@ class Sphere {
   }
 }
 
-function solveQuad (a, b, c, tmin, tmax) {
+function solveQuad(a, b, c, tmin, tmax) {
   // discriminant
   let d = b ** 2 - 4 * a * c
 
@@ -112,9 +112,9 @@ function solveQuad (a, b, c, tmin, tmax) {
 }
 
 class Triangle {
-	/* P0, P1, P2: three vertices (type THREE.Vector3) that define the triangle
-	 * n0, n1, n2: normal (type THREE.Vector3) of each vertex */
-  constructor (P0, P1, P2, material, n0, n1, n2) {
+  /* P0, P1, P2: three vertices (type THREE.Vector3) that define the triangle
+   * n0, n1, n2: normal (type THREE.Vector3) of each vertex */
+  constructor(P0, P1, P2, material, n0, n1, n2) {
     this.P0 = P0.clone()
     this.P1 = P1.clone()
     this.P2 = P2.clone()
@@ -127,10 +127,10 @@ class Triangle {
     this.zpos = [P0.z, P1.z, P2.z]
 
     this.C = new THREE.Vector3(
-                                getAvg(this.xpos),
-                                getAvg(this.ypos),
-                                getAvg(this.zpos),
-                              )
+      getAvg(this.xpos),
+      getAvg(this.ypos),
+      getAvg(this.zpos),
+    )
 
     if (n0) this.n0 = n0.clone()
     if (n1) this.n1 = n1.clone()
@@ -144,7 +144,7 @@ class Triangle {
       this.normal = this.P20.clone().cross(this.P21).normalize()
     }
   }
-  intersect (ray, tmin, tmax) {
+  intersect(ray, tmin, tmax) {
     let P2to0 = this.P20, P2to1 = this.P21
     let P2toOrigin = this.P2.clone().sub(ray.o)
 
@@ -172,7 +172,7 @@ class Triangle {
     }
     return isect
   }
-  getBound () {
+  getBound() {
     return {
       xmin: Math.min(...this.xpos), xmax: Math.max(...this.xpos),
       ymin: Math.min(...this.ypos), ymax: Math.max(...this.ypos),
@@ -181,23 +181,23 @@ class Triangle {
   }
 }
 
-function solveLinSystem (d, a, b, c) {
+function solveLinSystem(d, a, b, c) {
   let M = new THREE.Matrix3()
 
   M.set(d.x, a.x, b.x,
-         d.y, a.y, b.y,
-         d.z, a.z, b.z, )
+    d.y, a.y, b.y,
+    d.z, a.z, b.z,)
 
   M.getInverse(M)
   c.applyMatrix3(M)
   return [c.x, c.y, c.z]
 }
 
-function getAvg (array) {
+function getAvg(array) {
   return array.reduce((a, b) => a + b) / array.length
 }
 
-function shapeLoadOBJ (objname, material, smoothnormal) {
+function shapeLoadOBJ(objname, material, smoothnormal) {
   loadOBJAsMesh(objname, function (mesh) { // callback function for non-blocking load
     if (smoothnormal) mesh.computeVertexNormals()
     for (let i = 0; i < mesh.faces.length; i++) {
@@ -213,7 +213,7 @@ function shapeLoadOBJ (objname, material, smoothnormal) {
         shapes.push(new Triangle(p0, p1, p2, material))
       }
     }
-  }, function () {}, function () {})
+  }, function () { }, function () { })
 }
 
 /* ========================================

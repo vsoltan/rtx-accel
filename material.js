@@ -8,7 +8,7 @@
  * ior: index of refraction (transparent material) (float)
  */
 class Material {
-  constructor () {
+  constructor() {
     this.ka = null
     this.kd = null
     this.ks = null
@@ -19,14 +19,14 @@ class Material {
   }
 }
 
-function DiffuseMaterial (ka, kd) {
+function DiffuseMaterial(ka, kd) {
   let m = new Material()
   m.ka = ka.clone()
   m.kd = kd.clone()
   return m
 }
 
-function PhongMaterial (ka, kd, ks, p) {
+function PhongMaterial(ka, kd, ks, p) {
   let m = new Material()
   m.ka = ka.clone()
   m.kd = kd.clone()
@@ -35,13 +35,13 @@ function PhongMaterial (ka, kd, ks, p) {
   return m
 }
 
-function MirrorMaterial (kr) {
+function MirrorMaterial(kr) {
   let m = new Material()
   m.kr = kr.clone()
   return m
 }
 
-function GlassMaterial (kr, kt, ior) {
+function GlassMaterial(kr, kt, ior) {
   let m = new Material()
   m.kr = kr.clone()
   m.kt = kt.clone()
